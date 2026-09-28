@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>काशी वैदिक सेवा | KASHI VEDIC SEVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{cream:'#fbf5e6',ivory:'#fffdf7',saffron:'#f28c1b',maroon:'#6b1f2a',gold:'#b8862e',sand:'#f3e6c8'},fontFamily:{head:['"Tiro Devanagari Hindi"','serif']}}}}
+</script>
+<style>
+html{scroll-behavior:smooth;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);scroll-padding-top:80px}
+body{background:#fbf5e6;color:#3b2a20;font-family:'Noto Sans Devanagari',sans-serif}
+.gt{background:linear-gradient(90deg,#f28c1b,#b8862e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rv{opacity:0;transform:translateY(26px);transition:all .8s ease}.rv.in{opacity:1;transform:none}
+@keyframes flick{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08) rotate(2deg)}}.flame{animation:flick 2.2s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes spin{to{transform:rotate(360deg)}}.slow{animation:spin 90s linear infinite}
+@keyframes pulse2{0%{box-shadow:0 0 0 0 #25d36688}100%{box-shadow:0 0 0 16px #25d36600}}.pl{animation:pulse2 2s infinite}
+.card{background:#fffdf7;border:1px solid #e6d3a3;box-shadow:0 4px 18px #b8862e1a}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect } = React;
+const PHONE="919876543210";
+const nav=[["Home","home"],["हमारी सेवाएं","services"],["बुकिंग","booking"],["हमारे बारे में","about"],["गैलरी","gallery"],["संपर्क","contact"]];
+const cats=["सभी","पूजा-पाठ","संस्कार","हवन-यज्ञ","पितृ कर्म"];
+const services=[
+ {i:"🔱",t:"रुद्राभिषेक",c:"पूजा-पाठ",pop:1,d:"गंगाजल, दूध व पंचामृत से भगवान शिव का विधिवत अभिषेक।"},
+ {i:"📖",t:"सत्यनारायण कथा",c:"पूजा-पाठ",pop:1,d:"सुख-समृद्धि हेतु पूर्ण विधि-विधान से कथा एवं पूजन।"},
+ {i:"🪐",t:"नवग्रह शांति",c:"पूजा-पाठ",d:"ग्रह दोष निवारण हेतु मंत्र जाप, दान और नवग्रह पूजन।"},
+ {i:"🏡",t:"गृह प्रवेश",c:"संस्कार",pop:1,d:"नए घर में वास्तु शुद्धि, कलश स्थापना और हवन सहित।"},
+ {i:"💍",t:"विवाह संस्कार",c:"संस्कार",d:"शुभ मुहूर्त, सप्तपदी व सभी वैदिक रस्मों का संचालन।"},
+ {i:"👶",t:"नामकरण",c:"संस्कार",d:"जन्म कुंडली के अनुसार शिशु का शुभ नामकरण संस्कार।"},
+ {i:"🧵",t:"उपनयन संस्कार",c:"संस्कार",d:"यज्ञोपवीत धारण एवं गायत्री मंत्र दीक्षा की शास्त्रीय विधि।"},
+ {i:"🔥",t:"हवन / यज्ञ",c:"हवन-यज्ञ",pop:1,d:"शुद्ध सामग्री व वेद मंत्रों के साथ पवित्र अग्नि अनुष्ठान।"},
+ {i:"🌿",t:"महामृत्युंजय जाप",c:"हवन-यज्ञ",d:"स्वास्थ्य व दीर्घायु हेतु सवा लाख मंत्र जाप और हवन।"},
+ {i:"🪔",t:"श्राद्ध / पिंडदान",c:"पितृ कर्म",d:"पितरों की शांति हेतु काशी के घाटों पर विधिपूर्वक कर्म।"},
+ {i:"🌊",t:"नारायण नागबली",c:"पितृ कर्म",d:"पितृ दोष निवारण हेतु शास्त्रोक्त विशेष अनुष्ठान।"},
+];
+const gal=["गंगा आरती","रुद्राभिषेक","हवन कुंड","सत्यनारायण पूजा","काशी घाट","विवाह मंडप"];
+const tests=[
+ {n:"राजेश मिश्रा",p:"लखनऊ",t:"पंडित जी ने गृह प्रवेश पूरे विधि-विधान से कराया। हर मंत्र का अर्थ भी समझाया। परिवार बहुत संतुष्ट रहा।"},
+ {n:"सुनीता देवी",p:"पटना",t:"सत्यनारायण कथा बहुत श्रद्धा से हुई। समय पर पहुँचे और पूजन सामग्री भी साथ लाए। धन्यवाद।"},
+ {n:"अमित तिवारी",p:"दिल्ली",t:"काशी में पिता जी का श्राद्ध कराया। पूरी प्रक्रिया शांत और सम्मानजनक रही। अत्यंत आभार।"},
+];
+const faqs=[
+ ["पूजा बुक करने के लिए कितने दिन पहले संपर्क करें?","सामान्य पूजा के लिए 2–3 दिन पहले, विवाह या बड़े अनुष्ठान के लिए 15–20 दिन पहले संपर्क करना उचित है। आपात स्थिति में हम उसी दिन भी प्रयास करते हैं।"],
+ ["क्या पूजन सामग्री आप लाते हैं?","जी हाँ, आपकी पसंद पर हम संपूर्ण सामग्री की व्यवस्था करते हैं। आप चाहें तो सामग्री सूची लेकर स्वयं भी ला सकते हैं।"],
+ ["क्या पंडित जी घर आकर पूजा कराते हैं?","हाँ, घर, मंदिर या काशी के घाट, जहाँ आप चाहें वहाँ पंडित जी उपलब्ध रहते हैं।"],
+ ["दक्षिणा कितनी होती है?","दक्षिणा पूजा के प्रकार, समय और स्थान पर निर्भर करती है। बुकिंग के समय स्पष्ट जानकारी दी जाती है।"],
+];
+const steps=[["🪷","सेवा चुनें","अपनी आवश्यकता के अनुसार पूजा या संस्कार चुनें।"],["📅","तारीख/स्थान चुनें","सुविधाजनक तिथि और पूजा स्थान बताएं।"],["🙏","पंडित जी पूजा कराएं","अनुभवी पंडित जी समय पर पहुँचकर पूजा संपन्न कराएं।"]];
+
+function useReveal(){useEffect(()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("in")}),{threshold:.1});document.querySelectorAll(".rv").forEach(el=>io.observe(el));return()=>io.disconnect()});}
+function Count({to,suf}){const [v,setV]=useState(0);const [go,setGo]=useState(false);const ref=React.useRef(null);
+ useEffect(()=>{const io=new IntersectionObserver(([e])=>{if(e.isIntersecting){setGo(true);io.disconnect()}});io.observe(ref.current);return()=>io.disconnect()},[]);
+ useEffect(()=>{if(!go)return;let n=0;const id=setInterval(()=>{n+=Math.max(1,Math.ceil(to/40));if(n>=to){n=to;clearInterval(id)}setV(n)},30);return()=>clearInterval(id)},[go]);
+ return <span ref={ref}>{v}{suf}</span>}
+const Mandala=({className=""})=>(<svg viewBox="-100 -100 200 200" className={className} fill="none" stroke="#b8862e" strokeWidth="1">{[...Array(16)].map((_,i)=><ellipse key={i} rx="9" ry="42" cy="-52" transform={`rotate(${i*22.5})`}/>)}{[...Array(8)].map((_,i)=><ellipse key={"b"+i} rx="6" ry="24" cy="-30" transform={`rotate(${i*45})`}/>)}<circle r="92"/><circle r="96" strokeDasharray="2 4"/><circle r="10"/></svg>);
+const Scene=({i,label})=>{const a=["#f7c873","#f4a259","#f6b96b","#f9d58c","#f2a65a","#f7c08a"][i%6];return(
+ <svg viewBox="0 0 400 300" className="w-full h-full"><defs><radialGradient id={"g"+i} cx="50%" cy="55%"><stop offset="0" stopColor="#fff3c9"/><stop offset="1" stopColor={a}/></radialGradient></defs>
+ <rect width="400" height="300" fill={"url(#g"+i+")"}/><g transform="translate(200 120)" opacity=".5"><g className="slow" style={{transformOrigin:"0 0"}}><circle r="80" fill="none" stroke="#b8862e" strokeDasharray="3 6"/><circle r="55" fill="none" stroke="#b8862e"/></g></g>
+ <path d="M0 235 Q100 212 200 235 T400 235 V300 H0Z" fill="#6b1f2a" opacity=".85"/><g transform="translate(200 165)"><path d="M-24 42 Q0 66 24 42Z" fill="#b8862e"/><path className="flame" d="M0 34 Q-13 12 0 -10 Q13 12 0 34Z" fill="#f28c1b"/></g>
+ <text x="200" y="278" textAnchor="middle" fill="#fffdf7" fontSize="20" fontFamily="Tiro Devanagari Hindi">{label}</text></svg>)};
+const Title=({s,t})=>(<div className="text-center mb-10 rv"><p className="text-saffron text-sm tracking-widest font-medium">{s}</p><h2 className="font-head text-3xl sm:text-4xl mt-2 text-maroon">{t}</h2><div className="mt-2 text-gold">━━ ❁ ━━</div></div>);
+const Btn=({href,cls,children,ext})=><a href={href} target={ext?"_blank":undefined} rel="noreferrer" className={"px-6 py-3 rounded-full font-medium transition hover:scale-105 "+cls}>{children}</a>;
+
+function Navbar(){const [open,setOpen]=useState(false);const [sc,setSc]=useState(false);
+ useEffect(()=>{const f=()=>setSc(scrollY>30);addEventListener("scroll",f);return()=>removeEventListener("scroll",f)},[]);
+ return(<header className={"fixed top-0 inset-x-0 z-40 transition-all "+(sc||open?"bg-ivory/95 backdrop-blur shadow-md border-b border-gold/30":"")} style={{paddingTop:"env(safe-area-inset-top,0px)"}}>
+ <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+ <a href="#home" className="flex items-center gap-2"><span className="text-2xl">🕉️</span><span className="font-head text-lg text-maroon leading-tight">KASHI VEDIC SEVA<small className="block text-[10px] tracking-widest text-gold">काशी वैदिक सेवा</small></span></a>
+ <nav className="hidden md:flex gap-6 text-sm text-maroon">{nav.map(([l,id])=><a key={id} href={"#"+id} className="hover:text-saffron transition">{l}</a>)}</nav>
+ <a href="#booking" className="hidden md:block px-4 py-2 rounded-full bg-saffron text-white text-sm font-medium hover:bg-maroon transition">पूजा बुक करें</a>
+ <button aria-label="menu" className="md:hidden text-maroon text-2xl" onClick={()=>setOpen(!open)}>{open?"✕":"☰"}</button></div>
+ {open&&<div className="md:hidden px-4 pb-4 grid">{nav.map(([l,id])=><a key={id} href={"#"+id} onClick={()=>setOpen(false)} className="py-3 border-b border-gold/20 text-maroon">{l}</a>)}</div>}</header>)}
+
+function Hero(){return(<section id="home" className="relative min-h-screen pt-24 pb-16 flex items-center overflow-hidden bg-gradient-to-br from-ivory via-cream to-[#fbe3b8]">
+ <Mandala className="absolute -right-40 -top-10 w-[700px] opacity-25 slow"/>
+ <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center relative">
+ <div className="rv"><p className="text-saffron tracking-widest text-sm mb-3 font-medium">॥ हर हर महादेव ॥</p>
+ <h1 className="font-head text-4xl sm:text-5xl lg:text-6xl leading-tight text-maroon">काशी के <span className="gt">विद्वान पंडितों</span> द्वारा शुद्ध वैदिक पूजा</h1>
+ <p className="mt-5 text-[#5a4335] leading-relaxed max-w-lg">बाबा विश्वनाथ की नगरी वाराणसी से, शास्त्रोक्त विधि, शुद्ध मंत्रोच्चार और पूर्ण श्रद्धा के साथ हर संस्कार एवं अनुष्ठान — आपके घर या मंदिर में।</p>
+ <div className="mt-8 flex flex-wrap gap-3">
+ <Btn href="tel:+919876543210" cls="border-2 border-maroon text-maroon hover:bg-maroon hover:text-white">📞 कॉल करें</Btn>
+ <Btn ext href={"https://wa.me/"+PHONE} cls="bg-[#1f9d55] text-white">💬 WhatsApp</Btn>
+ <Btn href="#booking" cls="bg-gradient-to-r from-saffron to-[#f5a340] text-white shadow-lg shadow-saffron/30">🪔 पूजा बुक करें</Btn></div></div>
+ <div className="rv relative mx-auto w-full max-w-md aspect-square"><div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/60 slow"/>
+ <div className="absolute inset-5 rounded-full overflow-hidden border-4 border-gold shadow-2xl shadow-saffron/30"><Scene i={1} label="पावन पूजा"/></div></div></div></section>)}
+
+function Stats(){const s=[["🛕",500,"+","पूजा संपन्न"],["👨‍👩‍👧",100,"+","परिवार"],["📜",10,"+","वर्षों का अनुभव"],["📞",24,"/7","सहायता"]];
+ return(<section className="max-w-6xl mx-auto px-4 -mt-8 relative z-10"><div className="card rounded-2xl grid grid-cols-2 md:grid-cols-4 divide-gold/20 md:divide-x">
+ {s.map(([ic,n,su,l])=><div key={l} className="rv text-center p-6"><div className="text-3xl">{ic}</div><b className="font-head text-3xl text-maroon block mt-1"><Count to={n} suf={su}/></b><span className="text-sm text-[#5a4335]">{l}</span></div>)}</div></section>)}
+
+function Services(){const [cat,setCat]=useState("सभी");const list=services.filter(s=>cat==="सभी"||s.c===cat);
+ return(<section id="services" className="py-20 max-w-6xl mx-auto px-4"><Title s="हमारी सेवाएं" t="वैदिक अनुष्ठान एवं संस्कार"/>
+ <div className="flex gap-2 overflow-x-auto pb-3 mb-8 sm:justify-center">{cats.map(c=><button key={c} onClick={()=>setCat(c)} className={"shrink-0 px-5 py-2 rounded-full text-sm border transition "+(cat===c?"bg-maroon text-white border-maroon":"bg-ivory text-maroon border-gold/50 hover:border-saffron")}>{c}</button>)}</div>
+ <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">{list.map(s=><a href="#booking" key={s.t} className="card relative group p-6 rounded-2xl hover:-translate-y-1.5 hover:border-saffron transition duration-300">
+ {s.pop&&<span className="absolute top-4 right-4 text-[11px] px-2.5 py-1 rounded-full bg-saffron text-white">⭐ लोकप्रिय</span>}
+ <div className="w-14 h-14 rounded-full grid place-items-center text-3xl bg-sand border border-gold/40 group-hover:scale-110 transition">{s.i}</div>
+ <h3 className="font-head text-xl mt-4 text-maroon">{s.t}</h3><p className="text-xs text-gold mt-0.5">{s.c}</p>
+ <p className="text-sm text-[#5a4335] mt-2 leading-relaxed">{s.d}</p><span className="inline-block mt-4 text-sm text-saffron font-medium">बुक करें →</span></a>)}</div></section>)}
+
+function How(){return(<section className="py-20 bg-sand/60"><div className="max-w-6xl mx-auto px-4"><Title s="प्रक्रिया" t="कैसे काम करता है?"/>
+ <div className="grid md:grid-cols-3 gap-6 relative">{steps.map(([ic,t,d],k)=><div key={t} className="rv card rounded-2xl p-7 text-center relative"><div className="absolute -top-4 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-saffron text-white grid place-items-center font-bold">{k+1}</div>
+ <div className="text-5xl mt-3">{ic}</div><h3 className="font-head text-xl text-maroon mt-3">{t}</h3><p className="text-sm text-[#5a4335] mt-2">{d}</p>{k<2&&<span className="hidden md:block absolute -right-5 top-1/2 text-2xl text-saffron z-10">➜</span>}</div>)}</div></div></section>)}
+
+function Booking(){const [f,setF]=useState({name:"",phone:"",service:services[0].t,date:"",city:"",msg:""});const [done,setDone]=useState(false);
+ const set=k=>e=>setF({...f,[k]:e.target.value});
+ const submit=()=>{if(!f.name||f.phone.replace(/\D/g,"").length<10||!f.date){alert("कृपया नाम, सही मोबाइल नंबर और तिथि भरें।");return}setDone(true)};
+ const wa=`https://wa.me/${PHONE}?text=`+encodeURIComponent(`नमस्ते, मैं ${f.name} ${f.service} बुक करना चाहता/चाहती हूँ। तिथि: ${f.date}, स्थान: ${f.city}, मोबाइल: ${f.phone}. ${f.msg}`);
+ const inp="w-full px-4 py-3 rounded-lg bg-white border border-gold/40 focus:border-saffron outline-none text-[#3b2a20]";
+ return(<section id="booking" className="py-20"><div className="max-w-3xl mx-auto px-4"><Title s="बुकिंग" t="अपनी पूजा आरक्षित करें"/>
+ <div className="rv card rounded-2xl p-6 sm:p-8">{done?<div className="text-center py-8"><div className="text-6xl">🙏</div><h3 className="font-head text-2xl text-maroon mt-3">धन्यवाद, {f.name}!</h3><p className="text-[#5a4335] mt-2">आपका अनुरोध दर्ज हो गया है। पंडित जी शीघ्र संपर्क करेंगे।</p>
+ <div className="mt-6 flex flex-wrap gap-3 justify-center"><Btn ext href={wa} cls="bg-[#1f9d55] text-white">WhatsApp पर पुष्टि करें</Btn><button onClick={()=>setDone(false)} className="px-6 py-3 rounded-full border-2 border-maroon text-maroon">नई बुकिंग</button></div></div>
+ :<div className="grid sm:grid-cols-2 gap-4"><input className={inp} placeholder="आपका नाम *" value={f.name} onChange={set("name")}/><input className={inp} placeholder="मोबाइल नंबर *" inputMode="tel" value={f.phone} onChange={set("phone")}/>
+ <select className={inp} value={f.service} onChange={set("service")}>{services.map(s=><option key={s.t}>{s.t}</option>)}</select><input className={inp} type="date" value={f.date} onChange={set("date")}/>
+ <input className={inp+" sm:col-span-2"} placeholder="शहर / पूजा स्थान" value={f.city} onChange={set("city")}/><textarea className={inp+" sm:col-span-2"} rows={3} placeholder="विशेष संदेश (वैकल्पिक)" value={f.msg} onChange={set("msg")}/>
+ <button onClick={submit} className="sm:col-span-2 py-3.5 rounded-full bg-gradient-to-r from-saffron to-[#f5a340] text-white font-semibold hover:scale-[1.02] transition">🪔 बुकिंग अनुरोध भेजें</button>
+ <p className="sm:col-span-2 text-xs text-center text-[#8a7566]">डेमो फ़ॉर्म: डेटा कहीं सहेजा नहीं जाता।</p></div>}</div></div></section>)}
+
+function CTA(){return(<section className="px-4 pb-4"><div className="max-w-6xl mx-auto rounded-3xl p-10 sm:p-14 text-center text-white relative overflow-hidden bg-gradient-to-r from-saffron via-[#f5a340] to-saffron shadow-xl shadow-saffron/30">
+ <Mandala className="absolute -left-20 -top-20 w-72 opacity-30 slow"/><div className="relative"><h2 className="font-head text-3xl sm:text-4xl">आज ही पूजा बुक करें</h2><p className="mt-3 max-w-xl mx-auto opacity-95">शुभ कार्य में देरी क्यों? हमारे पंडित जी से अभी बात करें और अपनी तिथि सुरक्षित करें।</p>
+ <div className="mt-7 flex flex-wrap gap-3 justify-center"><Btn href="#booking" cls="bg-white text-maroon">🪔 अभी बुक करें</Btn><Btn href="tel:+919876543210" cls="border-2 border-white text-white hover:bg-white hover:text-maroon">📞 कॉल करें</Btn></div></div></div></section>)}
+
+function About(){return(<section id="about" className="py-20 max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center"><div className="rv aspect-[4/3] rounded-2xl overflow-hidden border-4 border-gold/50 shadow-xl"><Scene i={4} label="काशी की गंगा आरती"/></div>
+ <div className="rv"><p className="text-saffron text-sm tracking-widest">हमारे बारे में</p><h2 className="font-head text-3xl sm:text-4xl mt-2 text-maroon">परंपरा, श्रद्धा और शुद्धता</h2>
+ <p className="mt-5 text-[#5a4335] leading-relaxed">काशी वैदिक सेवा की स्थापना वाराणसी के वेदपाठी ब्राह्मणों द्वारा इस उद्देश्य से की गई कि हर परिवार तक शास्त्र-सम्मत पूजा पहुँचे। हमारे पंडित जी कर्मकांड, ज्योतिष और वैदिक मंत्रों में निपुण हैं।</p>
+ <ul className="mt-5 space-y-2">{["शुद्ध पूजन सामग्री की व्यवस्था","शुभ मुहूर्त का सटीक निर्धारण","पूजा से पहले विधि की सरल जानकारी","घर, मंदिर या घाट — कहीं भी सेवा"].map(x=><li key={x}><span className="text-saffron">✦</span> {x}</li>)}</ul></div></section>)}
+
+function Testimonials(){return(<section className="py-20 bg-sand/60"><div className="max-w-6xl mx-auto px-4"><Title s="श्रद्धालुओं के अनुभव" t="हमारे यजमान क्या कहते हैं"/>
+ <div className="grid md:grid-cols-3 gap-6">{tests.map(t=><div key={t.n} className="rv card rounded-2xl p-6"><div className="text-saffron text-lg">★★★★★</div><p className="mt-3 text-[#5a4335] leading-relaxed text-sm">“{t.t}”</p>
+ <div className="mt-5 flex items-center gap-3"><div className="w-10 h-10 rounded-full bg-maroon text-white grid place-items-center font-head">{t.n[0]}</div><div><b className="text-maroon text-sm">{t.n}</b><p className="text-xs text-gold">{t.p}</p></div></div></div>)}</div></div></section>)}
+
+function Gallery(){const [sel,setSel]=useState(null);
+ useEffect(()=>{const k=e=>{if(e.key==="Escape")setSel(null);if(sel!==null&&e.key==="ArrowRight")setSel((sel+1)%gal.length);if(sel!==null&&e.key==="ArrowLeft")setSel((sel+gal.length-1)%gal.length)};addEventListener("keydown",k);return()=>removeEventListener("keydown",k)},[sel]);
+ return(<section id="gallery" className="py-20 max-w-6xl mx-auto px-4"><Title s="गैलरी" t="पावन क्षणों की झलक"/>
+ <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">{gal.map((g,i)=><button key={g} onClick={()=>setSel(i)} className="rv aspect-[4/3] rounded-xl overflow-hidden border-2 border-gold/40 hover:border-saffron hover:scale-[1.03] transition duration-300"><Scene i={i} label={g}/></button>)}</div>
+ {sel!==null&&<div className="fixed inset-0 z-50 bg-maroon/85 backdrop-blur-sm grid place-items-center p-4" onClick={()=>setSel(null)}><button className="absolute top-4 right-5 text-3xl text-white" aria-label="बंद">✕</button>
+ <button className="absolute left-3 text-4xl text-white" onClick={e=>{e.stopPropagation();setSel((sel+gal.length-1)%gal.length)}}>‹</button>
+ <div className="w-full max-w-3xl aspect-[4/3] rounded-xl overflow-hidden border-4 border-gold" onClick={e=>e.stopPropagation()}><Scene i={sel} label={gal[sel]}/></div>
+ <button className="absolute right-3 text-4xl text-white" onClick={e=>{e.stopPropagation();setSel((sel+1)%gal.length)}}>›</button></div>}</section>)}
+
+function FAQ(){const [o,setO]=useState(0);return(<section className="py-20 bg-sand/60"><div className="max-w-3xl mx-auto px-4"><Title s="सामान्य प्रश्न" t="अक्सर पूछे जाने वाले प्रश्न"/>
+ <div className="space-y-3">{faqs.map(([q,a],i)=><div key={q} className="rv card rounded-xl overflow-hidden"><button onClick={()=>setO(o===i?-1:i)} className="w-full flex justify-between items-center gap-3 text-left px-5 py-4 text-maroon font-medium"><span>{q}</span><span className={"text-saffron text-xl transition-transform "+(o===i?"rotate-45":"")}>＋</span></button>
+ <div className="grid transition-all duration-300" style={{gridTemplateRows:o===i?"1fr":"0fr"}}><div className="overflow-hidden"><p className="px-5 pb-4 text-sm text-[#5a4335] leading-relaxed">{a}</p></div></div></div>)}</div></div></section>)}
+
+function Contact(){const c=[["📞","फ़ोन","+91 98765 43210"],["✉️","ईमेल","seva@kashivedicseva.in"],["🕘","समय","प्रतिदिन प्रातः 6:00 – रात्रि 9:00"]];
+ return(<section id="contact" className="py-20 max-w-6xl mx-auto px-4"><Title s="संपर्क" t="हमसे जुड़ें"/>
+ <div className="grid md:grid-cols-2 gap-6"><div className="space-y-4">{c.map(([i,a,b])=><div key={a} className="rv card flex gap-4 p-5 rounded-xl"><span className="text-3xl">{i}</span><div><b className="text-maroon">{a}</b><p className="text-sm text-[#5a4335] mt-1">{b}</p></div></div>)}
+ <div className="rv card flex gap-4 p-5 rounded-xl"><span className="text-3xl">📍</span><div><b className="text-maroon">पता</b><p className="text-sm text-[#5a4335] mt-1">दशाश्वमेध घाट के पास, वाराणसी, उत्तर प्रदेश 221001</p></div></div></div>
+ <div className="rv card rounded-2xl overflow-hidden relative min-h-[300px]"><svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full"><rect width="400" height="300" fill="#f3ead2"/>
+ <path d="M0 210 C90 170 150 240 230 190 S350 130 400 150 V300 H0Z" fill="#a9d3e8"/><text x="120" y="262" fill="#3b6f8c" fontSize="13">माँ गंगा</text>
+ {[[0,80,400,80],[0,140,300,120],[110,0,140,200],[260,0,250,150],[330,0,330,130]].map((l,i)=><line key={i} x1={l[0]} y1={l[1]} x2={l[2]} y2={l[3]} stroke="#fffdf7" strokeWidth="9"/>)}
+ <g transform="translate(205 108)"><path d="M0 0C-20-26-22-44 0-48 22-44 20-26 0 0Z" fill="#c0392b" transform="translate(0 4)"/><circle cy="-30" r="7" fill="#fff"/></g></svg>
+ <div className="absolute bottom-3 inset-x-3 flex items-center justify-between gap-2 bg-ivory/95 rounded-xl p-3 shadow"><div className="text-sm"><b className="text-maroon">काशी वैदिक सेवा</b><p className="text-xs text-[#5a4335]">दशाश्वमेध घाट, वाराणसी</p></div>
+ <a href="https://www.google.com/maps/search/?api=1&query=Dashashwamedh+Ghat+Varanasi" target="_blank" rel="noreferrer" className="shrink-0 px-4 py-2 rounded-full bg-saffron text-white text-sm">दिशा देखें</a></div></div></div></section>)}
+
+function Footer(){return(<footer className="bg-ivory border-t-4 border-gold pt-12 pb-24 text-center px-4"><div className="text-4xl">🕉️</div><p className="font-head text-2xl text-maroon mt-2">KASHI VEDIC SEVA</p>
+ <p className="text-gold text-sm mt-2">॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ॥</p><div className="mt-5 flex flex-wrap justify-center gap-5 text-sm text-maroon">{nav.map(([l,id])=><a key={id} href={"#"+id} className="hover:text-saffron">{l}</a>)}</div>
+ <p className="text-[#8a7566] text-xs mt-8">© 2026 काशी वैदिक सेवा। सर्वाधिकार सुरक्षित।</p></footer>)}
+
+function Floaters(){const [up,setUp]=useState(false);useEffect(()=>{const f=()=>setUp(scrollY>400);addEventListener("scroll",f);return()=>removeEventListener("scroll",f)},[]);
+ const b="w-14 h-14 rounded-full grid place-items-center text-2xl text-white shadow-lg hover:scale-110 transition";
+ return(<><div className="fixed right-4 z-40 flex flex-col gap-3" style={{bottom:"calc(env(safe-area-inset-bottom,0px) + 16px)"}}>
+ <button aria-label="ऊपर जाएं" onClick={()=>scrollTo({top:0,behavior:"smooth"})} className={"w-11 h-11 self-center rounded-full bg-maroon text-white shadow-lg transition "+(up?"opacity-100":"opacity-0 pointer-events-none")}>↑</button>
+ <a aria-label="Call" href="tel:+919876543210" className={b+" bg-maroon"}>📞</a><a aria-label="WhatsApp" target="_blank" rel="noreferrer" href={"https://wa.me/"+PHONE} className={b+" bg-[#25d366] pl"}>💬</a></div></>)}
+
+function App(){useReveal();return(<><Navbar/><Hero/><Stats/><Services/><How/><Booking/><CTA/><About/><Testimonials/><Gallery/><FAQ/><Contact/><Footer/><Floaters/></>)}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
